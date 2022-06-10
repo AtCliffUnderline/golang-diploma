@@ -8,7 +8,6 @@ import (
 
 	"github.com/AtCliffUnderline/golang-diploma/internal/config"
 	"github.com/AtCliffUnderline/golang-diploma/internal/database"
-	"github.com/AtCliffUnderline/golang-diploma/internal/entities"
 	router "github.com/AtCliffUnderline/golang-diploma/internal/http"
 	"github.com/AtCliffUnderline/golang-diploma/internal/integrations"
 	"github.com/caarlos0/env/v6"
@@ -27,9 +26,9 @@ func main() {
 	flag.Parse()
 
 	s := database.InitStorage(c)
-	ur := entities.UserStorage{Storage: *s}
+	ur := database.UserStorage{Storage: *s}
 	or := database.OrderStorage{Storage: *s}
-	wr := entities.WithdrawnStorage{Storage: *s}
+	wr := database.WithdrawnStorage{Storage: *s}
 	as := integrations.AccrualService{Address: c.AccrualSystemAddress, OrderRepository: or}
 	l, err := zap.NewProduction()
 	if err != nil {

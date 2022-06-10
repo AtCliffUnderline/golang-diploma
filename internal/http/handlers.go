@@ -19,9 +19,9 @@ import (
 
 type Handler struct {
 	Config              config.Config
-	UserRepository      entities.UserRepository
+	UserRepository      database.UserRepository
 	OrderRepository     database.OrderRepository
-	WithdrawnRepository entities.WithdrawnRepository
+	WithdrawnRepository database.WithdrawnRepository
 }
 
 func (h Handler) Dummy(c *gin.Context) {

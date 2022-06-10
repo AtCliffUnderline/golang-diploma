@@ -1,13 +1,13 @@
 package http
 
 import (
+	"github.com/AtCliffUnderline/golang-diploma/internal/database"
 	"net/http"
 
-	"github.com/AtCliffUnderline/golang-diploma/internal/entities"
 	"github.com/gin-gonic/gin"
 )
 
-func AuthMiddleware(ur entities.UserStorage) gin.HandlerFunc {
+func AuthMiddleware(ur database.UserStorage) gin.HandlerFunc {
 	return func(c *gin.Context) {
 		cookie, err := c.Cookie("auth")
 		if cookie == "" || err != nil {

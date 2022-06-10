@@ -1,16 +1,16 @@
 package http
 
 import (
+	"github.com/AtCliffUnderline/golang-diploma/internal/database"
 	"go.uber.org/zap"
 	"time"
 
-	"github.com/AtCliffUnderline/golang-diploma/internal/entities"
 	"github.com/gin-contrib/gzip"
 	ginzap "github.com/gin-contrib/zap"
 	"github.com/gin-gonic/gin"
 )
 
-func SetupRouter(h Handler, ur entities.UserStorage, l *zap.Logger) *gin.Engine {
+func SetupRouter(h Handler, ur database.UserStorage, l *zap.Logger) *gin.Engine {
 
 	r := gin.Default()
 
