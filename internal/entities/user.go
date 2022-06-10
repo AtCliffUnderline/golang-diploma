@@ -62,11 +62,11 @@ func (ur UserStorage) SetAuthToken(login string, token string) error {
 }
 
 func (ur UserStorage) GetBalance(userID int) (int, error) {
-	var or OrderStorage
+	var or database.OrderStorage
 	var wr WithdrawnStorage
 	var balance int
 	var withdraw int
-	query := fmt.Sprintf("SELECT COALESCE(SUM(o.accrual), 0) FROM %s o WHERE o.user_id = %d AND o.status = 'PROCESSED';", or.getTableName(), userID)
+	query := fmt.Sprintf("SELECT COALESCE(SUM(o.accrual), 0) FROM %s o WHERE o.user_id = %d AND o.status = 'PROCESSED';", or.GetTableName(), userID)
 	err := ur.Storage.DBConn.QueryRow(context.Background(), query).Scan(&balance)
 	if err != nil {
 		return 0, err

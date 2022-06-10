@@ -5,13 +5,12 @@ import (
 	"time"
 
 	"github.com/AtCliffUnderline/golang-diploma/internal/entities"
-	"github.com/AtCliffUnderline/golang-diploma/internal/integrations"
 	"github.com/gin-contrib/gzip"
 	ginzap "github.com/gin-contrib/zap"
 	"github.com/gin-gonic/gin"
 )
 
-func SetupRouter(as integrations.AccrualService, h Handler, ur entities.UserStorage, or entities.OrderStorage, l *zap.Logger) *gin.Engine {
+func SetupRouter(h Handler, ur entities.UserStorage, l *zap.Logger) *gin.Engine {
 
 	r := gin.Default()
 
@@ -25,10 +24,10 @@ func SetupRouter(as integrations.AccrualService, h Handler, ur entities.UserStor
 	authorized := r.Group("/").Use(AuthMiddleware(ur))
 
 	authorized.POST("/api/user/orders", h.OrderRegister)
-	authorized.GET("/api/user/orders", OrdersSyncMiddleware(or, as, l), h.OrdersGet)
-	authorized.GET("/api/user/balance", OrdersSyncMiddleware(or, as, l), h.BalanceGet)
-	authorized.POST("/api/user/balance/withdraw", OrdersSyncMiddleware(or, as, l), h.WithdrawRegister)
-	authorized.GET("/api/user/balance/withdrawals", OrdersSyncMiddleware(or, as, l), h.WithdrawalsGet)
+	authorized.GET("/api/user/orders", h.OrdersGet)
+	authorized.GET("/api/user/balance", h.BalanceGet)
+	authorized.POST("/api/user/balance/withdraw", h.WithdrawRegister)
+	authorized.GET("/api/user/balance/withdrawals", h.WithdrawalsGet)
 
 	return r
 }

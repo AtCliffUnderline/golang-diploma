@@ -3,6 +3,8 @@ package main
 import (
 	"flag"
 	"go.uber.org/zap"
+	"log"
+	"time"
 
 	"github.com/AtCliffUnderline/golang-diploma/internal/config"
 	"github.com/AtCliffUnderline/golang-diploma/internal/database"
@@ -26,19 +28,31 @@ func main() {
 
 	s := database.InitStorage(c)
 	ur := entities.UserStorage{Storage: *s}
-	or := entities.OrderStorage{Storage: *s}
+	or := database.OrderStorage{Storage: *s}
 	wr := entities.WithdrawnStorage{Storage: *s}
 	as := integrations.AccrualService{Address: c.AccrualSystemAddress, OrderRepository: or}
 	l, err := zap.NewProduction()
 	if err != nil {
-		panic(err)
+		log.Fatal(err)
 	}
 
 	h := router.Handler{Config: c, UserRepository: ur, OrderRepository: or, WithdrawnRepository: wr}
-	r := router.SetupRouter(as, h, ur, or, l)
+	r := router.SetupRouter(h, ur, l)
+
+	initOrdersChecker(as)
 
 	err = r.Run(c.RunAddress)
 	if err != nil {
-		panic(err)
+		log.Fatal(err)
+	}
+}
+
+func initOrdersChecker(as integrations.AccrualService) {
+	ticker := time.NewTicker(1 * time.Second)
+	for {
+		select {
+		case <-ticker.C:
+			as.SyncAllOrders()
+		}
 	}
 }

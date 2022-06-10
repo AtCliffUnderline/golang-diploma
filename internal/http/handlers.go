@@ -3,6 +3,7 @@ package http
 import (
 	"encoding/json"
 	"errors"
+	"github.com/AtCliffUnderline/golang-diploma/internal/database"
 	"io/ioutil"
 	"net/http"
 	"strconv"
@@ -19,7 +20,7 @@ import (
 type Handler struct {
 	Config              config.Config
 	UserRepository      entities.UserRepository
-	OrderRepository     entities.OrderRepository
+	OrderRepository     database.OrderRepository
 	WithdrawnRepository entities.WithdrawnRepository
 }
 
