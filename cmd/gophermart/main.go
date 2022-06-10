@@ -48,10 +48,9 @@ func main() {
 
 func initOrdersChecker(as integrations.AccrualService) {
 	ticker := time.NewTicker(1 * time.Second)
-	for {
-		select {
-		case <-ticker.C:
+	go func() {
+		for range ticker.C {
 			as.SyncAllOrders()
 		}
-	}
+	}()
 }
